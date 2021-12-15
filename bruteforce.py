@@ -23,3 +23,8 @@ ele = [('Montre à gousset', 2, 6),
        ('Portrait de tata Germaine', 4, 12)]
 
 print('Algo force', sac_a_dos_force_brute(5, ele))
+
+
+def read_shares():
+    with open('test_shares.csv') as csv:
+        pass
