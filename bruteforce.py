@@ -15,39 +15,49 @@ def read_shares():
         MAX_INVEST = 500
         for share_row in shares_file:
             shares_list.append((share_row[0], float(share_row[1]), float(share_row[2])))
+        selected_elements = []
 
-    return shares_list
-
-
-"""for i in range(len(shares_list)):
-            possibilities = combinations(shares_list, i + 1)
-            for possibility in possibilities:
+    for i in range(len(shares_list)):
+        possibilities = combinations(shares_list, i+1)
+        for elements in possibilities:
+            for actions in elements:
                 costs = []
                 gains = []
-            for el in possibility:
-                costs.append(el[1])
-            sum(costs)
-            for el in possibility:
-                gains.append(el[1] * el[2] / 100)
-            sum(gains)"""
+                all_costs = 0
+                all_gains = 0
+                costs.append(actions[1])
+                gains.append(actions[2])
+                for cost in costs:
+                    all_costs += cost
+                for gain in gains:
+                    all_gains += gain
+
+                if all_costs <= MAX_INVEST:
+
+                    selected_elements.append((round(all_gains, 2), actions))
+
+        selected_elements = sorted(selected_elements, key=lambda x: -x[0])
+
+
+    print(selected_elements[0])
 
 
 def calc_brute(shares_list, MAX_INVEST=500, bag=None):
-    shares_list[0:0] = map(list, shares_list[0:19])
-    if bag is None:
-        bag = []
-    if shares_list:
-        shares_list[0][1], shares_list[0][2] = calc_brute(shares_list[1:], MAX_INVEST, bag)
-        val = shares_list[0][1]
-        if val <= MAX_INVEST:
-            shares_list[1][1], shares_list[1][2] = calc_brute(MAX_INVEST - shares_list[0][1], shares_list[:1], bag + [val])
-            if shares_list[0][1] < shares_list[1][1]:
-                return shares_list[1][1], shares_list[1][2]
 
-        return shares_list[0][1], shares_list[0][2]
+        if bag is None:
+            bag = []
+        if shares_list:
+            shares_list[0][1], shares_list[0][2] = calc_brute(shares_list[-1:], MAX_INVEST, bag)
+            val = shares_list[0][1]
+            if val <= MAX_INVEST:
+                shares_list[1][1], shares_list[1][2] = calc_brute(MAX_INVEST - shares_list[0][1], shares_list[:1], bag + [val])
+                if shares_list[0][1] < shares_list[1][1]:
+                    return shares_list[1][1], shares_list[1][2]
 
-    else:
-        return sum([i[2] for i in bag]), bag
+            return shares_list[0][1], shares_list[0][2]
+
+        else:
+            return sum([i[2] for i in bag]), bag
 
 # print(f'{info[0]}, {info[1]}, {info[2]}')
 
@@ -73,5 +83,5 @@ C denotes the cost of the item.
 
 
 if __name__ == '__main__':
-    shares = read_shares()
-    calc_brute(shares, 500)
+    read_shares()
+
