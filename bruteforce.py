@@ -9,8 +9,8 @@ from itertools import combinations
 
 
 def read_shares():
-    with open('test_shares.csv') as csv_file:
-        shares_file = csv.reader(csv_file, delimiter=',')
+    with open("test_shares.csv") as csv_file:
+        shares_file = csv.reader(csv_file, delimiter=",")
         shares_list = []
         for share_row in shares_file:
             shares_list.append((share_row[0], float(share_row[1]), float(share_row[2])))
@@ -36,13 +36,14 @@ def read_shares():
 
                     if all_costs <= MAX_INVEST:
 
-                        shares_selected.append((round(all_gains, 2), elements))# actions ou elements????????
+                        shares_selected.append(
+                            (round(all_gains), (round(all_costs)), elements)
+                        )  # actions ou elements????????
 
-        shares_selected = sorted(shares_selected, key=lambda x: -x[0])
-
-    # print(len(shares_selected))
-    print(shares_selected[-0])
-
+    shares_selected = sorted(shares_selected, key=lambda x: -x[0])
+    # print(all_costs, all_gains)
+    print(len(shares_selected))
+    print(shares_selected[0])
 
 
 """
@@ -65,5 +66,5 @@ C denotes the cost of the item.
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     read_shares()
