@@ -22,22 +22,24 @@ def read_shares(max_cost=500):
 
 
 def find_the_profit(shares_list):
+    gains = []
     for shares in shares_list:
         profit = shares[1] * shares[2] / 100
+        gains.append(profit)
+    return (sum(gains))
 
-        return profit
 
 
 def make_combinations(shares_list):
-
     for i in range(len(shares_list)):
-        combos = combinations(shares_list, i+1)
-        cost = 0
-        for elements in combos:
-            elements = sorted(elements, key=lambda x: x[0])
-            if elements[0][1] <= 500:
-                cost += elements[0][1]
-                print(cost)
+        possibilities = combinations(shares_list, i+1)
+        for element in possibilities:
+            print(element)
+
+def find_the_cost(shares_list):
+    pass
+
+
 if __name__ == "__main__":
     shares = read_shares()
     # read_shares()
