@@ -44,13 +44,13 @@ def knapsack(value, price):
     return K[n][MAX_INVEST] / 100
 
 
-shares = read_shares("dataset2_P7.csv")
+shares = read_shares("dataset1_P7.csv")
 value = []
 price = []
 for j in shares:
     value.append(round(float(j['value'])))
     price.append(round(float(j['price'])))
-knapsack(value, price)
+print(knapsack(value, price))
 # n = len(shares)
 # MAX_INVEST = 500
 # benefit = shares['benefit']
