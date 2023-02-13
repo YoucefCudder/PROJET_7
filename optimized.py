@@ -1,53 +1,52 @@
-#!/usr/bin/python3
-# coding: utf8
-
 import csv
+import datetime
 
 MAX_COST = 500
 
 
-def read_shares(csv_doc):
-    """ """
-    with open(csv_doc) as csv_file:
-        data_list = list(csv.reader(csv_file))
-    selection = []
-    take = []
-    for row in data_list[1:]:
-        if round(float(row[1])) != 0 and float(row[2]) >= 0 and not row[1].startswith("-"):
-            benefit = round(float(row[1]) * float(row[2]) / 100, 2)
-            ratio = round(float(row[2])) / round(float(row[1]))
-            selection.append(
-                {
-                    "action": row[0],
-                    "price": float(row[1]),
-                    "value": float(row[2]),
-                    "benefit": benefit,
-                    "ratio": ratio,
-                }
-            )
+class Stock:
+    def __init__(self, name, cost, rate):
+        self.name = name
+        self.cost = float(cost)
+        self.rate = float(rate)
+        self.profit = self.cost * self.rate / 100
 
-    sorted_selection = sorted(selection, key=lambda x: x["ratio"], reverse=True)
 
-    total_cost, total_gain = 0, 0
-    left_space = MAX_COST
-    print(f'Pour une limite de {MAX_COST}, il est préférable d\' acheter : \n')
-    for share in sorted_selection:
-        if share["price"] < left_space and share not in take:
-            total_gain += share["benefit"]
-            total_cost += share["price"]
-            left_space -= share["price"]
-            take.append(share)
-        # if take.count(share) > 1:
-        #     take.remove(share)
-        print(f'{share["action"]}', end=' ')
-        # print()
+def parse_csv(file_path):
+    parsed_dataset = []
+    with open(file_path) as file:
+        for row in csv.DictReader(file):
+            if float(row['price']) > 0 and float(row['profit']) > 0 and not row['price'].startswith("-"):
+                parsed_dataset.append(Stock(row['name'], row['price'], row['profit']))
+    return parsed_dataset
 
-    print(f'\n Pour un coût total de : {round(total_cost, 2)}\n')
-    print(f'\n Avec un gain total de : {round(total_gain, 2)}')
+
+def greedy(stocks):
+    stocks.sort(key=lambda x: x.rate, reverse=True)
+    cost, profit = 0, 0
+    selected_stocks = []
+    for stock in stocks:
+        if cost + stock.cost <= MAX_COST:
+            cost += stock.cost
+            profit += stock.profit
+            selected_stocks.append(stock.name)
+    return {
+        'total_cost': cost,
+        'total_profit': profit,
+        'selected_stocks': selected_stocks
+    }
+
+
+def print_results(results, time):
+    print("Voici les actions à acheter: ")
+    for stock in results['selected_stocks']:
+        print(" - " + stock)
+    print("Coût: " + str(round(results['total_cost'], 2)))
+    print("Profit: " + str(round(results['total_profit'], 2)))
+    print("Temps d'éxecution: " + str(time))
 
 
 if __name__ == "__main__":
-    read_shares("dataset1_P7.csv")
-    read_shares("dataset2_P7.csv")
-    # read_shares( "dataset2_P7.csv")
-    # read_shares("test_shares.csv")
+    start_date = datetime.datetime.now()
+    dataset = parse_csv("dataset2_P7.csv")
+    print_results(greedy(dataset), datetime.datetime.now() - start_date)

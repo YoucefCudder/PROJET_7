@@ -2,10 +2,6 @@
 # coding: utf8
 
 
-""" enumerer toutes les combinaisons possibles
- trier les combinaisons possibles par rapport au maximum
- choisir la  meilleure combinaison"""
-
 import csv
 from itertools import combinations
 
@@ -13,10 +9,6 @@ MAX_INVEST = 500
 
 
 def read_shares():
-    """
-
-    :return:
-    """
     with open("test_shares.csv") as csv_file:
         shares_file = csv.reader(csv_file, delimiter=",")
         shares_list = []
