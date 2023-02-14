@@ -48,5 +48,5 @@ def print_results(results, time):
 
 if __name__ == "__main__":
     start_date = datetime.datetime.now()
-    dataset = parse_csv("dataset2_P7.csv")
+    dataset = parse_csv("dataset1_P7.csv")
     print_results(greedy(dataset), datetime.datetime.now() - start_date)

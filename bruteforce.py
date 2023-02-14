@@ -3,6 +3,7 @@
 
 
 import csv
+import datetime
 from itertools import combinations
 
 MAX_INVEST = 500
@@ -44,7 +45,13 @@ def read_shares():
         f'{shares_selected[0]["combi"]}, pour un coût total de {round(shares_selected[0]["price"], 2)}€'
         f'et un gain de {round(shares_selected[0]["gain"], 2)}€'
     )
+def print_results(results, time):
+
+    print("Temps d'éxecution: " + str(time))
 
 
 if __name__ == "__main__":
-    read_shares()
+    start_date = datetime.datetime.now()
+
+    print_results(read_shares(), datetime.datetime.now() - start_date)
+
